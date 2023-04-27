@@ -1,7 +1,9 @@
-from django.views.generic import ListView
+from django.views.generic import ListView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
 
 from .models import ScreenShot
+from .forms import ScreenShotForm
 
 
 class ScreenShotsListView(LoginRequiredMixin, ListView):
@@ -13,3 +15,13 @@ class ScreenShotsListView(LoginRequiredMixin, ListView):
         query = super().get_queryset()
         query = query.filter(user=self.request.user)
         return query
+
+
+class ScreenShotsCreateView(LoginRequiredMixin, CreateView):
+    form_class = ScreenShotForm
+    template_name = "web/create_shot.html"
+    success_url = reverse_lazy("home")
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
