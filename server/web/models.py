@@ -3,6 +3,7 @@ import os
 from django.db import models
 from django.conf import settings
 from django.dispatch import receiver
+from django.db.models.signals import post_delete
 
 
 def get_file_upload_path(instance, filename):
@@ -20,7 +21,7 @@ class ScreenShot(models.Model):
         return f"{self.user} {self.created}"
 
 
-@receiver(models.signals.post_delete, sender=ScreenShot)
+@receiver(post_delete, sender=ScreenShot)
 def auto_delete_file_on_delete(sender, instance, **kwargs):
     """
     Deletes file from filesystem

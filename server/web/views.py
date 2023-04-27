@@ -1,4 +1,4 @@
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 
@@ -13,7 +13,7 @@ class ScreenShotsListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         query = super().get_queryset()
-        query = query.filter(user=self.request.user)
+        query = query.filter(user=self.request.user).order_by("-created")
         return query
 
 
@@ -26,3 +26,8 @@ class ScreenShotsCreateView(LoginRequiredMixin, CreateView):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
+
+class ScreenShotsDeleteView(LoginRequiredMixin, DeleteView):
+    model = ScreenShot
+    template_name = "web/confirm_delete_shot.html"
+    success_url = reverse_lazy("home")

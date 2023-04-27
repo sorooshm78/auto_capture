@@ -1,11 +1,27 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    
-    {% for shot in shots %}
-        <img src="{{ shot.image.url }}" width="800" height="500"/>
-        <p>{{ shot.created|date:'Y-m-d' }} {{ shot.created|time:'H:i' }}</p>
-        <hr>
-    {% endfor %}
-
+    <style>
+        table, th, td {
+            border:1px solid black;
+        }
+    </style>
+    <table>
+        <tr>
+            <th></th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Image</th>
+            <th>Actions</th>
+        </tr>
+        {% for shot in shots %}    
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ shot.created|date:'Y-m-d' }}</td>
+                <td>{{ shot.created|time:'H:i' }}</td>
+                <td><a href="{{ shot.image.url }}">Link</a></td>
+                <td><a href="{% url 'delete_shot' shot.id %}">Delete</a></td>
+            </tr>
+        {% endfor %}        
+    </table> 
 {% endblock content %}
