@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    
+    {% for shot in shots %}
+        <img src="{{ shot.image.url }}" />
+        <p>{{ shot.datetime }}</p>
+        <hr>
+    {% endfor %}
+
+{% endblock content %}
