@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Register{% endblock title %}
+
+{% block content %}  
+<div class="container py-5 h-100">
+	<div class="row d-flex justify-content-center align-items-center h-100">
+		<div class="col-12 col-md-8 col-lg-6 col-xl-5">
+			<div class="card shadow-2-strong" style="border-radius: 1rem;">
+				<div class="card-body p-5 text-center">
+					<h3 class="mb-5">Register</h3>
+					<form method="POST">
+						{% csrf_token %}
+						<div class="form-outline mb-4">
+							<input type="username" id="id_username" name="username" class="form-control form-control-lg" placeholder="Username"/>
+						</div>
+						<div class="form-outline mb-4">
+							<input type="password" id="id_password1" name="password1" class="form-control form-control-lg" placeholder="Password"/>
+						</div>
+						<div class="form-outline mb-4">
+							<input type="password" id="id_password2" name="password2" class="form-control form-control-lg" placeholder="Password confirmation"/>
+						</div>
+						<button class="btn btn-primary btn-lg btn-block" type="submit">Register</button>
+					</form>
+				</div>
+
+				{% if form.errors %}
+					<div class="alert alert-danger">
+					<ul>
+						{% for field in form %}
+							{% if field.errors %}
+								{% for error in field.errors %}
+									<li>{{ error|escape }}</li>
+								{% endfor %}
+							{% endif %}
+						{% endfor %}
+					</ul>
+					{% if form.non_field_errors %}
+						{{ form.non_field_errors }}
+					{% endif %}
+					</div>
+				{% endif %}
+
+				<div class="text-center">
+					<p>Have already an account? <a href="{% url 'login' %}">Login</a></p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock content %}
