@@ -1,5 +1,8 @@
+import os
+
 from django.db import models
 from django.conf import settings
+from django.dispatch import receiver
 
 
 def get_file_upload_path(instance, filename):
@@ -11,4 +14,18 @@ class ScreenShot(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="screenshots"
     )
     image = models.ImageField(upload_to=get_file_upload_path)
-    datetime = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField()
+
+    def __str__(self):
+        return f"{self.user} {self.created}"
+
+
+@receiver(models.signals.post_delete, sender=ScreenShot)
+def auto_delete_file_on_delete(sender, instance, **kwargs):
+    """
+    Deletes file from filesystem
+    when corresponding `ScreenShot` object is deleted.
+    """
+    if instance.image:
+        if os.path.isfile(instance.image.path):
+            os.remove(instance.image.path)

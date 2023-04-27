@@ -3,8 +3,8 @@
 {% block content %}
     
     {% for shot in shots %}
-        <img src="{{ shot.image.url }}" />
-        <p>{{ shot.datetime }}</p>
+        <img src="{{ shot.image.url }}" width="800" height="500"/>
+        <p>{{ shot.created|date:'Y-m-d' }} {{ shot.created|time:'H:i' }}</p>
         <hr>
     {% endfor %}
 

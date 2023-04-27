@@ -1,6 +1,9 @@
-import pyscreenshot as ImageGrab
+import os
 import requests
+import time
+import pyscreenshot as ImageGrab
 from datetime import datetime
+
 
 import secret
 
@@ -14,7 +17,13 @@ SHOT_TIME = secret.SHOT_TIME
 MEDIA_FOLDER_NAME = "media"
 
 
+def create_meida_folder():
+    if not os.path.exists(MEDIA_FOLDER_NAME):
+        os.makedirs(MEDIA_FOLDER_NAME)
+
+
 def take_screenshot(filename):
+    create_meida_folder()
     screenshot = ImageGrab.grab()
     screenshot.save(f"{MEDIA_FOLDER_NAME}/{filename}.png")
 
@@ -32,14 +41,25 @@ def login_user(session):
     )
 
 
-def send_screenshot_to_server(session, filename):
-    files = {"image": open(f"media/{filename}.png", "rb")}
-    session.post(UPLOAD_URL, files=files)
+def send_screenshot_to_server(session, filename, created):
+    files = {
+        "image": open(f"media/{filename}.png", "rb"),
+    }
+
+    data = {
+        "created": created.isoformat(),
+    }
+
+    session.post(UPLOAD_URL, files=files, data=data)
 
 
 with requests.Session() as session:
     session = requests.Session()
-    filename = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    take_screenshot(filename)
     login_user(session)
-    send_screenshot_to_server(session, filename)
+
+    while True:
+        time.sleep(SHOT_TIME)
+        created = datetime.now()
+        filename = created.strftime("%Y-%m-%d_%H-%M-%S")
+        take_screenshot(filename)
+        send_screenshot_to_server(session, filename, created)
