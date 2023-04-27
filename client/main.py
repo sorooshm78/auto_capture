@@ -53,13 +53,14 @@ def send_screenshot_to_server(session, filename, created):
     session.post(UPLOAD_URL, files=files, data=data)
 
 
-with requests.Session() as session:
-    session = requests.Session()
-    login_user(session)
+if __name__ == "__main__":
+    with requests.Session() as session:
+        session = requests.Session()
+        login_user(session)
 
-    while True:
-        time.sleep(SHOT_TIME)
-        created = datetime.now()
-        filename = created.strftime("%Y-%m-%d_%H-%M-%S")
-        take_screenshot(filename)
-        send_screenshot_to_server(session, filename, created)
+        while True:
+            time.sleep(SHOT_TIME)
+            created = datetime.now()
+            filename = created.strftime("%Y-%m-%d_%H-%M-%S")
+            take_screenshot(filename)
+            send_screenshot_to_server(session, filename, created)
