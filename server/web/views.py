@@ -31,3 +31,7 @@ class ScreenShotsDeleteView(LoginRequiredMixin, DeleteView):
     model = ScreenShot
     template_name = "web/confirm_delete_shot.html"
     success_url = reverse_lazy("home")
+
+    def get_queryset(self):
+        query = super().get_queryset()
+        return query.filter(user=self.request.user)
