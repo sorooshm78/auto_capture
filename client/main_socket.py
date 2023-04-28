@@ -1,3 +1,4 @@
+import os
 import pyscreenshot as ImageGrab
 import websockets
 import asyncio
@@ -9,7 +10,14 @@ from datetime import datetime
 import config
 
 
+async def create_meida_folder():
+    if not os.path.exists(config.MEDIA_FOLDER_NAME):
+        os.makedirs(config.MEDIA_FOLDER_NAME)
+
+
 async def send_screenshot(websocket):
+    await create_meida_folder()
+
     while True:
         now = datetime.now()
 
