@@ -1,13 +1,16 @@
 import json
+import base64
 
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
+from django.core.files.base import ContentFile
+from django.contrib.auth.models import User
+
+from .models import ScreenShot
 
 
 class ScreenShotsConsumer(WebsocketConsumer):
     def connect(self):
-        print("user is connect")
-
         self.room_group_name = "chat_0"
 
         self.accept()
@@ -25,16 +28,25 @@ class ScreenShotsConsumer(WebsocketConsumer):
 
     def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
-        message = text_data_json["message"]
 
-        # send chat message event to the room
+        image = text_data_json["image"]
+        created = text_data_json["created"]
+        filename = text_data_json["filename"]
+
+        bytes_data = base64.b64decode(image)
+
+        u = User.objects.get(id=1)
+
+        shot = ScreenShot.objects.create(created=created, user=u)
+        shot.image.save(f"{filename}.png", ContentFile(bytes_data), save=True)
+
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
-                "type": "chat_message",
-                "message": message,
+                "type": "send_message",
+                "message": "ok",
             },
         )
 
-    def chat_message(self, event):
+    def send_message(self, event):
         self.send(text_data=json.dumps(event))
