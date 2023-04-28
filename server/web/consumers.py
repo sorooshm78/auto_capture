@@ -11,7 +11,20 @@ from .models import ScreenShot
 
 class ScreenShotsConsumer(WebsocketConsumer):
     def connect(self):
-        self.room_group_name = "chat_0"
+        auth = dict(self.scope["headers"]).get(b"auth").decode()
+        username, password = auth.split(":")
+
+        # Check username exist
+        try:
+            self.user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return
+
+        # Check password
+        if not self.user.check_password(password):
+            return
+
+        self.room_group_name = f"user_{self.user.id}"
 
         self.accept()
 
@@ -35,9 +48,7 @@ class ScreenShotsConsumer(WebsocketConsumer):
 
         bytes_data = base64.b64decode(image)
 
-        u = User.objects.get(id=1)
-
-        shot = ScreenShot.objects.create(created=created, user=u)
+        shot = ScreenShot.objects.create(created=created, user=self.user)
         shot.image.save(f"{filename}.png", ContentFile(bytes_data), save=True)
 
         async_to_sync(self.channel_layer.group_send)(

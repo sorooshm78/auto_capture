@@ -59,7 +59,12 @@ async def main(websocket):
 
 
 async def connect_and_run():
-    async with websockets.connect(config.WEBSOCKET_URL) as websocket:
+    async with websockets.connect(
+        config.WEBSOCKET_URL,
+        extra_headers={
+            "auth": f"{config.USERNAME}:{config.PASSWORD}",
+        },
+    ) as websocket:
         await main(websocket)
 
 
