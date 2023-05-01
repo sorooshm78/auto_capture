@@ -49,8 +49,8 @@ if __name__ == "__main__":
         login_user(session)
 
         while True:
-            time.sleep(config.SHOT_TIME)
             created = datetime.now()
             filename = created.strftime("%Y-%m-%d_%H-%M-%S")
             take_screenshot(filename)
             send_screenshot_to_server(session, filename, created)
+            time.sleep(config.SHOT_TIME)
