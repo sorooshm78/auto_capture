@@ -1,11 +1,12 @@
-# check_child
+# auto_capture
 
+![index](https://drive.google.com/uc?export=view&id=1r3pdFqTDNMOXAi1Lzrv7nu6ixjxVGcih)
 ## Usage
 I am using python "3.10.6" version 
 
 first step clone project
 ```
-git clone https://github.com/sorooshm78/check_child/
+git clone https://github.com/sorooshm78/auto_capture/
 ```
 
 and then install requirements  
@@ -28,7 +29,7 @@ Just go into the code directory and type
 ```
 python manage.py runserver
 ```
-"check_child" app will start on 127.0.0.1:8000 (Local Host).
+"auto_capture" app will start on 127.0.0.1:8000 (LocalHost).
  
 ## Client 
 Go to client directory and then run following commands
