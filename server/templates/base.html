@@ -1,6 +1,16 @@
+{% load static %}
+
 <!doctype html>
 <html>
+    <head>
+        <title>
+            {% block title %}Auto Capture{% endblock title %}
+        </title>
+        <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">    
+        <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    </head>
     <body>
+        {% include 'navbar.html' %}
         {% block content %}{% endblock content %}
     </body>
 </html>

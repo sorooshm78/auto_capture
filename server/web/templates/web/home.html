@@ -1,27 +1,33 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <style>
-        table, th, td {
-            border:1px solid black;
-        }
-    </style>
-    <table>
-        <tr>
-            <th></th>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Image</th>
-            <th>Actions</th>
-        </tr>
-        {% for shot in shots %}    
-            <tr>
-                <td>{{ forloop.counter }}</td>
-                <td>{{ shot.created|date:'Y-m-d' }}</td>
-                <td>{{ shot.created|time:'H:i' }}</td>
-                <td><a href="{{ shot.image.url }}">Link</a></td>
-                <td><a href="{% url 'delete_shot' shot.id %}">Delete</a></td>
-            </tr>
-        {% endfor %}        
-    </table> 
+    <div class="container mt-5">
+        <table class="table table-hover border">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Image</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for shot in shots %}    
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ shot.created|date:'Y-m-d' }}</td>
+                        <td>{{ shot.created|time:'H:i' }}</td>
+                        <td><a href="{{ shot.image.url }}">Link</a></td>
+                        <td><a href="{% url 'delete_shot' shot.id %}">Delete</a></td>
+                    </tr>
+                {% empty %}  
+                    <tr>
+                        <td>No content</td>
+                    </tr>
+                {% endfor %}                          
+            </tbody>
+          </table>
+    </div>
+    
 {% endblock content %}
