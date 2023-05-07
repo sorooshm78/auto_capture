@@ -24,7 +24,7 @@ class ScreenShotsConsumer(WebsocketConsumer):
         if not self.user.check_password(password):
             return
 
-        self.room_group_name = f"user_{self.user.id}"
+        self.room_group_name = f"client_{self.user.username}"
 
         self.accept()
 
@@ -42,22 +42,23 @@ class ScreenShotsConsumer(WebsocketConsumer):
     def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
 
-        image = text_data_json["image"]
-        created = text_data_json["created"]
-        filename = text_data_json["filename"]
+        # Receive screenshot
+        if text_data_json.get("screenshot"):
+            data = text_data_json["screenshot"]
 
-        bytes_data = base64.b64decode(image)
+            image = data["image"]
+            created = data["created"]
+            filename = data["filename"]
 
-        shot = ScreenShot.objects.create(created=created, user=self.user)
-        shot.image.save(f"{filename}.png", ContentFile(bytes_data), save=True)
+            bytes_data = base64.b64decode(image)
 
-        async_to_sync(self.channel_layer.group_send)(
-            self.room_group_name,
-            {
-                "type": "send_message",
-                "message": "ok",
-            },
-        )
+            shot = ScreenShot.objects.create(created=created, user=self.user)
+            shot.image.save(f"{filename}.png", ContentFile(bytes_data), save=True)
+
+        # Receive result command
+        elif text_data_json.get("result_command"):
+            result_command = text_data_json["result_command"]
+            print(f"result command : {result_command}")
 
     def send_message(self, event):
         self.send(text_data=json.dumps(event))

