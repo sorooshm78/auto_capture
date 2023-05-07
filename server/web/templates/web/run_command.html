@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Run Command {% endblock title %}
+
+{% block link %}
+    <script src="{% static 'web/js/index.js' %}"></script>
+{% endblock link %}
+
+{% block content %}
+    
+    <div class="container">
+        <input type="text" id="command">
+        <br>
+        <input type="button" onclick="run_command()" value="Run Command">
+        <br>
+        <textarea id="result_command" rows="10" cols="50" readonly></textarea>
+    </div>
+  
+{% endblock content %}

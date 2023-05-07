@@ -1,4 +1,4 @@
-from django.views.generic import ListView, CreateView, DeleteView
+from django.views.generic import ListView, CreateView, DeleteView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 
@@ -35,3 +35,7 @@ class ScreenShotsDeleteView(LoginRequiredMixin, DeleteView):
     def get_queryset(self):
         query = super().get_queryset()
         return query.filter(user=self.request.user)
+
+
+class RunCommandView(LoginRequiredMixin, TemplateView):
+    template_name = "web/run_command.html"

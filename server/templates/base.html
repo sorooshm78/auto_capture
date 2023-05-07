@@ -6,8 +6,13 @@
         <title>
             {% block title %}Auto Capture{% endblock title %}
         </title>
-        <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">    
+        
+        <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}"> 
+        
         <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+        <script src="{% static 'jquery/jquery.min.js' %}"></script>
+        
+        {% block link %}{% endblock link %}   
     </head>
     <body>
         {% include 'navbar.html' %}

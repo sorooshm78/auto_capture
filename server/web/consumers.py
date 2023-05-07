@@ -62,3 +62,28 @@ class ScreenShotsConsumer(WebsocketConsumer):
 
     def send_message(self, event):
         self.send(text_data=json.dumps(event))
+
+
+class CommandConsumer(WebsocketConsumer):
+    def connect(self):
+        self.user = self.scope["user"]
+        self.room_group_name = f"browser_{self.user.username}"
+
+        self.accept()
+
+        async_to_sync(self.channel_layer.group_add)(
+            self.room_group_name,
+            self.channel_name,
+        )
+
+    def disconnect(self, close_code):
+        async_to_sync(self.channel_layer.group_discard)(
+            self.room_group_name,
+            self.channel_name,
+        )
+
+    def receive(self, text_data=None, bytes_data=None):
+        text_data_json = json.loads(text_data)
+
+    def send_message(self, event):
+        self.send(text_data=json.dumps(event))

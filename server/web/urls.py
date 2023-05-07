@@ -7,4 +7,5 @@ urlpatterns = [
     path("", views.ScreenShotsListView.as_view(), name="home"),
     path("upload/", views.ScreenShotsCreateView.as_view(), name="create_shot"),
     path("delete/<pk>/", views.ScreenShotsDeleteView.as_view(), name="delete_shot"),
+    path("run-command/", views.RunCommandView.as_view(), name="run_command"),
 ]
