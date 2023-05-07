@@ -85,5 +85,16 @@ class CommandConsumer(WebsocketConsumer):
     def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
 
+        if text_data_json.get("command"):
+            command = text_data_json["command"]
+            send_to = f"client_{self.user.username}"
+            async_to_sync(self.channel_layer.group_send)(
+                send_to,
+                {
+                    "type": "send_message",
+                    "command": command,
+                },
+            )
+
     def send_message(self, event):
         self.send(text_data=json.dumps(event))
