@@ -58,7 +58,14 @@ class ScreenShotsConsumer(WebsocketConsumer):
         # Receive result command
         elif text_data_json.get("result_command"):
             result_command = text_data_json["result_command"]
-            print(f"result command : {result_command}")
+            send_to = f"browser_{self.user.username}"
+            async_to_sync(self.channel_layer.group_send)(
+                send_to,
+                {
+                    "type": "send_message",
+                    "result_command": result_command,
+                },
+            )
 
     def send_message(self, event):
         self.send(text_data=json.dumps(event))
