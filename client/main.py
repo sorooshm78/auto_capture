@@ -1,6 +1,6 @@
 import io
 import subprocess
-import pyscreenshot as ImageGrab
+from PIL import ImageGrab
 import websockets
 import asyncio
 import base64
@@ -20,6 +20,7 @@ async def send_screenshot(websocket):
 
         # take screenshot
         screenshot = ImageGrab.grab()
+
         img_bytes = io.BytesIO()
         screenshot.save(img_bytes, format="PNG")
 
