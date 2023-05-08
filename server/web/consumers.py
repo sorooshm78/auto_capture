@@ -9,6 +9,14 @@ from django.contrib.auth.models import User
 from .models import ScreenShot
 
 
+def get_client_connection_name(username):
+    return f"client_{username}"
+
+
+def get_browser_connection_name(username):
+    return f"browser_{username}"
+
+
 class ScreenShotsConsumer(WebsocketConsumer):
     def connect(self):
         auth = dict(self.scope["headers"]).get(b"auth").decode()
@@ -24,18 +32,18 @@ class ScreenShotsConsumer(WebsocketConsumer):
         if not self.user.check_password(password):
             return
 
-        self.room_group_name = f"client_{self.user.username}"
+        self.connection_name = get_client_connection_name(self.user.username)
 
         self.accept()
 
         async_to_sync(self.channel_layer.group_add)(
-            self.room_group_name,
+            self.connection_name,
             self.channel_name,
         )
 
     def disconnect(self, close_code):
         async_to_sync(self.channel_layer.group_discard)(
-            self.room_group_name,
+            self.connection_name,
             self.channel_name,
         )
 
@@ -58,9 +66,8 @@ class ScreenShotsConsumer(WebsocketConsumer):
         # Receive result command
         elif text_data_json.get("result_command"):
             result_command = text_data_json["result_command"]
-            send_to = f"browser_{self.user.username}"
             async_to_sync(self.channel_layer.group_send)(
-                send_to,
+                get_browser_connection_name(self.user.username),
                 {
                     "type": "send_message",
                     "result_command": result_command,
@@ -74,18 +81,18 @@ class ScreenShotsConsumer(WebsocketConsumer):
 class CommandConsumer(WebsocketConsumer):
     def connect(self):
         self.user = self.scope["user"]
-        self.room_group_name = f"browser_{self.user.username}"
+        self.connection_name = get_browser_connection_name(self.user.username)
 
         self.accept()
 
         async_to_sync(self.channel_layer.group_add)(
-            self.room_group_name,
+            self.connection_name,
             self.channel_name,
         )
 
     def disconnect(self, close_code):
         async_to_sync(self.channel_layer.group_discard)(
-            self.room_group_name,
+            self.connection_name,
             self.channel_name,
         )
 
@@ -94,9 +101,8 @@ class CommandConsumer(WebsocketConsumer):
 
         if text_data_json.get("command"):
             command = text_data_json["command"]
-            send_to = f"client_{self.user.username}"
             async_to_sync(self.channel_layer.group_send)(
-                send_to,
+                get_client_connection_name(self.user.username),
                 {
                     "type": "send_message",
                     "command": command,
