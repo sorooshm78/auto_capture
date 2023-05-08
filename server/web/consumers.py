@@ -9,6 +9,11 @@ from django.contrib.auth.models import User
 from .models import ScreenShot
 
 
+SCREENSHOT = "screenshot"
+RESULT_COMMAND = "result_command"
+COMMAND = "command"
+
+
 def get_client_connection_name(username):
     return f"client_{username}"
 
@@ -51,8 +56,8 @@ class ScreenShotsConsumer(WebsocketConsumer):
         text_data_json = json.loads(text_data)
 
         # Receive screenshot
-        if text_data_json.get("screenshot"):
-            data = text_data_json["screenshot"]
+        if text_data_json.get(SCREENSHOT):
+            data = text_data_json[SCREENSHOT]
 
             image = data["image"]
             created = data["created"]
@@ -64,8 +69,8 @@ class ScreenShotsConsumer(WebsocketConsumer):
             shot.image.save(f"{filename}.png", ContentFile(bytes_data), save=True)
 
         # Receive result command
-        elif text_data_json.get("result_command"):
-            result_command = text_data_json["result_command"]
+        elif text_data_json.get(RESULT_COMMAND):
+            result_command = text_data_json[RESULT_COMMAND]
             async_to_sync(self.channel_layer.group_send)(
                 get_browser_connection_name(self.user.username),
                 {
@@ -99,8 +104,8 @@ class CommandConsumer(WebsocketConsumer):
     def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
 
-        if text_data_json.get("command"):
-            command = text_data_json["command"]
+        if text_data_json.get(COMMAND):
+            command = text_data_json[COMMAND]
             async_to_sync(self.channel_layer.group_send)(
                 get_client_connection_name(self.user.username),
                 {
