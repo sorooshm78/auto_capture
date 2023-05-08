@@ -1,4 +1,4 @@
-import os
+import io
 import subprocess
 import pyscreenshot as ImageGrab
 import websockets
@@ -11,29 +11,19 @@ from datetime import datetime
 import config
 
 
-async def create_meida_folder():
-    if not os.path.exists(config.MEDIA_FOLDER_NAME):
-        os.makedirs(config.MEDIA_FOLDER_NAME)
-
-
 async def send_screenshot(websocket):
-    await create_meida_folder()
-
     while True:
         now = datetime.now()
 
         created = now.isoformat()
         filename = now.strftime("%Y-%m-%d_%H-%M-%S")
-        file_path = f"{config.MEDIA_FOLDER_NAME}/{filename}.png"
 
         # take screenshot
         screenshot = ImageGrab.grab()
-        screenshot.save(file_path)
+        img_bytes = io.BytesIO()
+        screenshot.save(img_bytes, format="PNG")
 
-        with open(file_path, "rb") as f:
-            image = f.read()
-
-        image_data = base64.b64encode(image).decode("utf-8")
+        image_data = base64.b64encode(img_bytes.getvalue()).decode("utf-8")
 
         data = json.dumps(
             {
