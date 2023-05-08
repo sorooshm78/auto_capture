@@ -6,38 +6,38 @@
 * Python >= 3.10.6
 ## Installation
 
-Clone the project:
+Clone the project
 ```
 git clone https://github.com/sorooshm78/auto_capture
 ```
 
-Install requirements:
+Install requirements
 ```
 pip install -r requirements.txt
 ```
 ## Run server
 
-Go to server directory then:
+Go to server directory then
 
 Create all the migrations files (database migrations) required to run this App.
 ```
 python manage.py makemigrations
 ```
 
-Apply migrations:
+Apply migrations
 ```
 python manage.py migrate
 ```
-Run server:
+Run server
 ```
 python manage.py runserver
 ```
 "auto_capture" app will start on 127.0.0.1:8000 (localhost).
  
 ## Run client 
-Go to server directory then:
+Go to server directory then
  
-Register in server and get username and password, then change config file in config.py and put username and password in it:
+Register in server and get username and password, then change config file in config.py and put username and password in it
 ```
 USERNAME = "username"
 PASSWORD = "password"
@@ -45,7 +45,7 @@ PASSWORD = "password"
 SHOT_TIME = 20  # second
 ```
 
-Run with:
+Run with
 ```
 python main_socket.py
 ```
