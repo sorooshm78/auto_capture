@@ -18,8 +18,8 @@
                         <td>{{ forloop.counter }}</td>
                         <td>{{ shot.created|date:'Y-m-d' }}</td>
                         <td>{{ shot.created|time:'H:i' }}</td>
-                        <td><a href="{{ shot.image.url }}">Link</a></td>
-                        <td><a href="{% url 'delete_shot' shot.id %}">Delete</a></td>
+                        <td><a class="btn btn-info" href="{{ shot.image.url }}">Link</a></td>
+                        <td><a class="btn btn-danger" href="{% url 'delete_shot' shot.id %}">Delete</a></td>
                     </tr>
                 {% empty %}  
                     <tr>
