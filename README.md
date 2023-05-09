@@ -49,5 +49,5 @@ SHOT_TIME = 30  # second
 
 Run with
 ```
-python main_socket.py
+python main.py
 ```
