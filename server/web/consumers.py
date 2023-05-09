@@ -6,7 +6,7 @@ from channels.generic.websocket import WebsocketConsumer
 from django.core.files.base import ContentFile
 from django.contrib.auth.models import User
 
-from .models import ScreenShot
+from .models import ScreenShot, OnlineClient
 
 
 SCREENSHOT = "screenshot"
@@ -38,6 +38,7 @@ class ScreenShotsConsumer(WebsocketConsumer):
             return
 
         self.connection_name = get_client_connection_name(self.user.username)
+        OnlineClient.objects.create(name=self.user.username)
 
         self.accept()
 
@@ -51,6 +52,7 @@ class ScreenShotsConsumer(WebsocketConsumer):
             self.connection_name,
             self.channel_name,
         )
+        OnlineClient.objects.get(name=self.user.username).delete()
 
     def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
@@ -75,7 +77,7 @@ class ScreenShotsConsumer(WebsocketConsumer):
                 get_browser_connection_name(self.user.username),
                 {
                     "type": "send_message",
-                    "result_command": result_command,
+                    RESULT_COMMAND: result_command,
                 },
             )
 
@@ -106,13 +108,25 @@ class CommandConsumer(WebsocketConsumer):
 
         if text_data_json.get(COMMAND):
             command = text_data_json[COMMAND]
-            async_to_sync(self.channel_layer.group_send)(
-                get_client_connection_name(self.user.username),
-                {
-                    "type": "send_message",
-                    "command": command,
-                },
-            )
+
+            # Check connect client
+            if OnlineClient.objects.filter(name=self.user.username).exists():
+                async_to_sync(self.channel_layer.group_send)(
+                    get_client_connection_name(self.user.username),
+                    {
+                        "type": "send_message",
+                        COMMAND: command,
+                    },
+                )
+            else:
+                result_command = "client not connected"
+                async_to_sync(self.channel_layer.group_send)(
+                    get_browser_connection_name(self.user.username),
+                    {
+                        "type": "send_message",
+                        RESULT_COMMAND: result_command,
+                    },
+                )
 
     def send_message(self, event):
         self.send(text_data=json.dumps(event))
