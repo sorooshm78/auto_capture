@@ -1,6 +1,8 @@
 # Auto-capture
 
-![index](https://drive.google.com/uc?export=view&id=1r3pdFqTDNMOXAi1Lzrv7nu6ixjxVGcih)
+![login](https://drive.google.com/uc?export=view&id=1DkgLjuJEfXAFmZqqwauLj0iDNnFzJ9k0)
+![home](https://drive.google.com/uc?export=view&id=1gQLBvPpOEE8Dxi801W6c0skeBEGqmvYu)
+![command](https://drive.google.com/uc?export=view&id=1moI93fX4-QmwEcWJj2d55btbVGtaRIh7)
 
 ## Compatibility
 * Python >= 3.10.6
@@ -42,7 +44,7 @@ Register in server and get username and password, then change config file in con
 USERNAME = "username"
 PASSWORD = "password"
 
-SHOT_TIME = 20  # second
+SHOT_TIME = 30  # second
 ```
 
 Run with
