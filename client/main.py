@@ -11,7 +11,7 @@ from datetime import datetime
 import config
 
 
-async def send_screenshot(websocket):
+async def send_screenshot(websocket, shot_time):
     while True:
         now = datetime.now()
 
@@ -37,7 +37,7 @@ async def send_screenshot(websocket):
         )
 
         await websocket.send(data)
-        await asyncio.sleep(config.SHOT_TIME)
+        await asyncio.sleep(shot_time)
 
 
 async def run_command(command):
@@ -60,20 +60,24 @@ async def receive_message(websocket):
                 await websocket.send(data)
 
 
-async def main(websocket):
-    send_task = asyncio.create_task(send_screenshot(websocket))
+async def main(websocket, shot_time):
+    send_task = asyncio.create_task(send_screenshot(websocket, shot_time))
     receive_task = asyncio.create_task(receive_message(websocket))
     await asyncio.gather(send_task, receive_task)
 
 
 async def connect_and_run():
+    username = input("Enter username : ")
+    password = input("Enter password : ")
+    shot_time = int(input("Enter shot time (second) : "))
+
     async with websockets.connect(
         config.WEBSOCKET_URL,
         extra_headers={
-            "auth": f"{config.USERNAME}:{config.PASSWORD}",
+            "auth": f"{username}:{password}",
         },
     ) as websocket:
-        await main(websocket)
+        await main(websocket, shot_time)
 
 
 asyncio.run(connect_and_run())
