@@ -37,17 +37,30 @@ python manage.py runserver
 "auto_capture" app will start on 127.0.0.1:8000 (localhost).
  
 ## Run client 
-Go to server directory then
+Go to client directory then
  
-Register in server and get username and password, then change config file in config.py and put username and password in it
-```
-USERNAME = "username"
-PASSWORD = "password"
+Register in server and get username and password, then when run application put username and password in it
 
-SHOT_TIME = 30  # second
-```
+### windows
+Go to `client/bin/windows` and run main.exe file
 
-Run with
+### linux
+Go to `client/bin/linux`
+```
+cd client/bin/linux
+```
+Run 
+```
+./main
+```
+may encounter the following problem when running on Linux.
+```
+OSError: X get_image failed: error 8 (73, 0, 1310)
+```
+For the solution, refer to the [link](https://stackoverflow.com/questions/75752576/pillow-imagegrab-grab-not-working-on-a-virtual-machine)
+
+
+### Python script with
 ```
 python main.py
 ```
