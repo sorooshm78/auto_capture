@@ -23,9 +23,7 @@ pip install -r requirements.txt
 ```
 ## Run server
 
-Go to server directory then
-
-Create all the migrations files (database migrations) required to run this App.
+Go to server directory and create all the migrations files (database migrations) required to run this App.
 ```
 python manage.py makemigrations
 ```
@@ -56,7 +54,7 @@ Following problem may be occur when running on Linux
 ```
 OSError: X get_image failed: error 8 (73, 0, 1310)
 ```
-To fix that refer to [link](https://stackoverflow.com/questions/75752576/pillow-imagegrab-grab-not-working-on-a-virtual-machine)
+To fix that refer to [this](https://stackoverflow.com/questions/75752576/pillow-imagegrab-grab-not-working-on-a-virtual-machine)
 
 
 ### Run manually
