@@ -1,5 +1,9 @@
 # Auto-capture
 
+Auto-capture gets screeshots from client periodically and shows it in server. It can also run commands in client and show the output in server.
+
+These are some images of server:
+
 ![login](https://drive.google.com/uc?export=view&id=1DkgLjuJEfXAFmZqqwauLj0iDNnFzJ9k0)
 ![home](https://drive.google.com/uc?export=view&id=1gQLBvPpOEE8Dxi801W6c0skeBEGqmvYu)
 ![command](https://drive.google.com/uc?export=view&id=1moI93fX4-QmwEcWJj2d55btbVGtaRIh7)
@@ -36,31 +40,26 @@ python manage.py runserver
 ```
 "auto_capture" app will start on 127.0.0.1:8000 (localhost).
  
-## Run client 
-Go to client directory then
- 
-Register in server and get username and password, then when run application put username and password in it
+## Run client
+Get username and password by registering in server. Then go to client directory, run it, input username, password and interval in seconds. 
 
-### windows
-Go to `client/bin/windows` and run main.exe file
+### Run in Windows
+Go to `client/bin/windows` and run main.exe file.
 
-### linux
-Go to `client/bin/linux`
+### Run in Linux
+Go to `client/bin/linux` and run
 ```
 cd client/bin/linux
-```
-Run 
-```
 ./main
 ```
-may encounter the following problem when running on Linux.
+Following problem may be occur when running on Linux
 ```
 OSError: X get_image failed: error 8 (73, 0, 1310)
 ```
-For the solution, refer to the [link](https://stackoverflow.com/questions/75752576/pillow-imagegrab-grab-not-working-on-a-virtual-machine)
+To fix that refer to [link](https://stackoverflow.com/questions/75752576/pillow-imagegrab-grab-not-working-on-a-virtual-machine)
 
 
-### Python script with
+### Run manually
 ```
 python main.py
 ```
