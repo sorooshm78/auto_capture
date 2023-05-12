@@ -47,7 +47,6 @@ Go to `client/bin/windows` and run main.exe file.
 ### Run in Linux
 Go to `client/bin/linux` and run
 ```
-cd client/bin/linux
 ./main
 ```
 Following problem may be occur when running on Linux
