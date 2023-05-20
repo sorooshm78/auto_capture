@@ -1,4 +1,6 @@
 import io
+import os
+import sys
 import subprocess
 from PIL import ImageGrab
 import websockets
@@ -80,4 +82,10 @@ async def connect_and_run():
         await main(websocket, shot_time)
 
 
-asyncio.run(connect_and_run())
+try:
+    asyncio.run(connect_and_run())
+except KeyboardInterrupt:
+    try:
+        sys.exit(0)
+    except SystemExit:
+        os._exit(0)
